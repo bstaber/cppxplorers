@@ -1,0 +1,12 @@
+/build/
+/cmake-build/
+/dist/
+/*.egg-info
+*.pyc
+__pycache__/
+/.vscode/
+/.idea/
+.spack-env/
+cmake/
+book/book
+book/mdbook-admonish.css

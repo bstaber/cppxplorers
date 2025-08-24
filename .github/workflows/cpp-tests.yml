@@ -1,0 +1,64 @@
+name: C++ / Spack / CTest
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-22.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+
+    env:
+      CMAKE_BUILD_TYPE: Release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set compiler
+        run: |
+          if [ "${{ matrix.compiler }}" = "clang" ]; then
+            sudo apt-get update
+            sudo apt-get install -y clang
+            echo "CC=clang"  >> $GITHUB_ENV
+            echo "CXX=clang++" >> $GITHUB_ENV
+          else
+            echo "CC=gcc"    >> $GITHUB_ENV
+            echo "CXX=g++"   >> $GITHUB_ENV
+          fi
+
+      - name: Setup CMake
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake
+
+      - name: Setup Spack
+        uses: spack/setup-spack@v2
+
+      - name: Concretize & install (from spack.yaml)
+        shell: spack-bash {0}
+        run: |
+          spack env create lobxp ./spack.yaml
+          spack env activate lobxp
+          spack concretize -f
+          spack install -j "$(nproc)"
+          spack find -dlv
+
+      - name: Configure
+        shell: spack-bash {0}
+        run: |
+          spack env activate lobxp
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+
+      - name: Build
+        run: cmake --build build -j $(nproc)
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure

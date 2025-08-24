@@ -1,0 +1,16 @@
+Checks: >
+  bugprone-*,
+  performance-*,
+  readability-*,
+  modernize-*,
+  cppcoreguidelines-*,
+  -modernize-use-trailing-return-type,
+  -cppcoreguidelines-owning-memory
+WarningsAsErrors: ''
+HeaderFilterRegex: '.*'
+FormatStyle: file
+CheckOptions:
+  - key:             modernize-use-nullptr.NullMacros
+    value:           'NULL'
+  - key:             cppcoreguidelines-pro-type-member-init.IgnoreArrays
+    value:           'true'
