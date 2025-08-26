@@ -1,0 +1,7 @@
+# crates/simple_optimizers/tests/CMakeLists.txt
+
+add_executable(simple_optizmiers_test test_simple_optimizers.cpp)
+
+target_link_libraries(simple_optizmiers_test PRIVATE simple_optimizers)
+
+add_test(NAME simple_optimizers_test COMMAND simple_optizmiers_test)
