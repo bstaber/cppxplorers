@@ -63,3 +63,84 @@ K_t = P_t^{t-1} A_t^T(A_t P_t^{t-1}A_t^T + S)^{-1}\,.
 $$
 
 Implementing the Kalman filter boils down to implement these few equations!
+
+## C++ implementation
+
+The following code provides a generic templated class `KFLinear` supporting both fixed-size and dynamic-size state and measurement vectors, using the [Eigen](https://eigen.tuxfamily.org/) linear algebra library.
+
+<details>
+<summary>Click here to view the full implementation: <b>include/kf_linear.hpp</b>. We break into down in the sequel of this section. </summary>
+
+```cpp
+{{#include ../../crates/kf_linear/include/kf_linear.hpp}}
+```
+</details>
+
+
+Here's the header file without the inlined implementations.
+
+```cpp
+#pragma once
+
+#include <Eigen/Dense>
+#include <iostream>
+#include <optional>
+#include <stdexcept>
+#include <vector>
+
+/**
+ * @brief Generic linear Kalman filter (templated, no control term).
+ *
+ * State-space model:
+ *   x_k = A x_{k-1} + w_{k-1},   w ~ N(0, Q)
+ *   z_k = H x_k     + v_k,       v ~ N(0, R)
+ *
+ * Template parameters:
+ *   Nx = state dimension      (int or Eigen::Dynamic)
+ *   Ny = measurement dimension(int or Eigen::Dynamic)
+ */
+template <int Nx, int Ny> class KFLinear {
+  public:
+    using StateVec = Eigen::Matrix<double, Nx, 1>;
+    using StateMat = Eigen::Matrix<double, Nx, Nx>;
+    using MeasVec  = Eigen::Matrix<double, Ny, 1>;
+    using MeasMat  = Eigen::Matrix<double, Ny, Ny>;
+    using ObsMat   = Eigen::Matrix<double, Ny, Nx>;
+
+    KFLinear(const StateVec &initial_state, const StateMat &initial_covariance,
+             const StateMat &transition_matrix, const ObsMat &observation_matrix,
+             const StateMat &process_covariance, const MeasMat &measurement_covariance);
+
+    void predict();
+    void update(const MeasVec &z);
+    void step(const std::optional<MeasVec> &measurement);
+    std::vector<StateVec> filter(const std::vector<std::optional<MeasVec>> &measurements);
+
+    [[nodiscard]] const StateVec &state() const { return x_; }
+    [[nodiscard]] const StateMat &covariance() const { return P_; }
+
+    void set_transition(const StateMat &A)      { A_ = A; }
+    void set_observation(const ObsMat &H)       { H_ = H; }
+    void set_process_noise(const StateMat &Q)   { Q_ = Q; }
+    void set_measurement_noise(const MeasMat &R){ R_ = R; }
+
+  private:
+    StateMat A_, Q_, P_;
+    ObsMat   H_;
+    MeasMat  R_;
+    StateVec x_;
+};
+```
+
+A few comments:
+
+- **Predict step**: The method `predict()` propagates the state and covariance using the transition matrix A and process noise covariance Q.
+
+- **Update step**: The method `update(z)` corrects the prediction using a new measurement z. It computes the Kalman gain K efficiently by solving a linear system with LDLT factorization instead of forming the matrix inverse explicitly. The covariance update uses the Joseph form to ensure numerical stability and positive semi-definiteness.
+
+- **Step and filter**: The `step()` method combines prediction with an optional update (useful when some measurements are missing). The `filter()` method processes an entire sequence of measurements, returning the sequence of estimated states.
+
+- **Flexibility**:  
+  - Works with both fixed-size and dynamic-size Eigen matrices.  
+  - Provides setters to update system matrices online (e.g. if the model changes over time).  
+  - Uses `std::optional` to naturally handle missing observations.
