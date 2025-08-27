@@ -53,3 +53,8 @@ fmt:
 fmt-check:
     find crates -type f \( -name '*.cpp' -o -name '*.hpp' \) -exec clang-format --dry-run --Werror {} +
 
+# -------------------------
+# Book
+# -------------------------
+serve-book:
+    mdbook serve book

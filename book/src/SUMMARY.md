@@ -1,5 +1,3 @@
 - [Introduction](introduction.md)
 - [Kalman filter](kf_linear.md)
-    - [Class definition]()
-    - [Class implementation]()
-    - [Python bindings]()
+- [Simple optimizers](simple_optimizers.md)
