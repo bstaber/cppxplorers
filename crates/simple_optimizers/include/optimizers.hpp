@@ -50,10 +50,12 @@ class Momentum final : public Optimizer {
     [[nodiscard]] const std::vector<double> &velocity() const noexcept { return v_; }
 
     void step(std::vector<double> &weights, const std::vector<double> &grads) override {
-        if (weights.size() != grads.size())
+        if (weights.size() != grads.size()) {
             throw std::invalid_argument("weights and grads size mismatch");
-        if (v_.size() != weights.size())
+        }
+        if (v_.size() != weights.size()) {
             throw std::invalid_argument("velocity size mismatch");
+        }
 
         for (std::size_t i = 0; i < weights.size(); ++i) {
             v_[i] = mu_ * v_[i] + lr_ * grads[i]; // v ← μ v + η g
