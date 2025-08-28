@@ -15,10 +15,18 @@ template <int order> class ARModel {
     [[nodiscard]] double noise() const noexcept { return sigma2_; }
     [[nodiscard]] const Vector &coefficients() const noexcept { return phi_; }
 
+		double forecast_one_step(const std::vector<double>& hist) const { return 0.0; }
+
   private:
     Vector phi_;
     double c_ = 0.0;
     double sigma2_ = 1.0;
 };
+
+template<int order>
+ARModel<order> fit_ar_ols(const std::vector<double>& x);
+
+template<int order>
+ARModel<order> fir_ar_yule_walkter(const std::vector<double>& x);
 
 } // namespace cppx::ar_models
