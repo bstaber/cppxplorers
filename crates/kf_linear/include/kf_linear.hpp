@@ -6,6 +6,8 @@
 #include <stdexcept>
 #include <vector>
 
+namespace cppx::kf_linear {
+
 /**
  * @brief Generic linear Kalman filter (templated, no control term).
  *
@@ -121,3 +123,5 @@ template <int Nx, int Ny> class KFLinear {
     StateVec x_; ///< State mean
     StateMat P_; ///< State covariance
 };
+
+} // namespace cppx::kf_linear

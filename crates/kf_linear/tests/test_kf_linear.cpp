@@ -8,6 +8,7 @@
 #include "kf_linear.hpp"
 
 using Catch::Approx;
+using namespace cppx::kf_linear;
 
 TEST_CASE("Predict-only step leaves state at A*x and P -> A P A^T + Q") {
     using KF = KFLinear<2, 1>;
