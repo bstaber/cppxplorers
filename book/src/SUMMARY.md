@@ -1,3 +1,4 @@
 - [Introduction](introduction.md)
 - [Kalman filter](kf_linear.md)
 - [Simple optimizers](simple_optimizers.md)
+- [Autoregressive models AR(p)]()
