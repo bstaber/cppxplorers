@@ -8,7 +8,7 @@ target_include_directories(ar_models INTERFACE
 
 # Link Eigen and set language level
 target_link_libraries(ar_models INTERFACE Eigen3::Eigen)
-target_compile_features(ar_models INTERFACE cxx_std_17)
+target_compile_features(ar_models INTERFACE cxx_std_20)
 
 # Demo executable
 add_executable(ar_demo src/main.cpp)

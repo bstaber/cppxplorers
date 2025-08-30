@@ -8,7 +8,7 @@ target_include_directories(kf_linear INTERFACE
 
 # Link Eigen and set language level
 target_link_libraries(kf_linear INTERFACE Eigen3::Eigen)
-target_compile_features(kf_linear INTERFACE cxx_std_17)
+target_compile_features(kf_linear INTERFACE cxx_std_20)
 
 # Demo executable
 add_executable(kf_demo src/main.cpp)

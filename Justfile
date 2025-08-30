@@ -29,7 +29,7 @@ install: build
     cmake --install {{BUILD_DIR}}
 
 test: build
-    ctest --test-dir {{BUILD_DIR}} --output-on-failure
+    ctest --test-dir {{BUILD_DIR}} --output-on-failure -VV
 
 clean:
     rm -rf {{BUILD_DIR}}
@@ -45,7 +45,7 @@ run-kalman:
 # Linting & formatting
 # -------------------------
 lint: build
-    clang-tidy crates/*/src/*.cpp -p {{BUILD_DIR}} -- -std=c++17
+    clang-tidy crates/*/src/*.cpp -p {{BUILD_DIR}} -- -std=c++20
 
 fmt:
     find crates -type f \( -name '*.cpp' -o -name '*.hpp' \) -exec clang-format -i {} +
