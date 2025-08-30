@@ -8,7 +8,7 @@ target_include_directories(simple_optimizers INTERFACE
 
 # Link Eigen and set language level
 target_link_libraries(simple_optimizers INTERFACE Eigen3::Eigen)
-target_compile_features(simple_optimizers INTERFACE cxx_std_17)
+target_compile_features(simple_optimizers INTERFACE cxx_std_20)
 
 # Demo executable
 add_executable(opt_demo src/main.cpp)
