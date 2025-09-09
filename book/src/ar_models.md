@@ -273,7 +273,7 @@ ARModel<order> fit_ar_yule_walkter(const std::vector<double> &x) {
 
 - The class holds parameters + forecasting but the algorithms live outside. This way, I can add/replace estimators without modifying the class.
 
-- `typename ARModel<order>::Vector` — why the `typename`? Inside templates, dependent names might be types or values. `typename` tells the compiler it’s a type.
+- `typename ARModel<order>::Vector`: why the `typename`? Inside templates, dependent names might be types or values. `typename` tells the compiler it’s a type.
 
 - `std::array` vs `std::vector`? `std::array<T,N>` is fixed-size (size known at compile time) and stack-allocated while `std::vector<T>` is dynamic-size (runtime) and heap-allocated.
 
