@@ -20,7 +20,7 @@ default: configure build test
 # CMake lifecycle
 # -------------------------
 configure:
-    cmake -S . -B {{BUILD_DIR}} {{GENERATOR}} {{CMAKE_FLAGS}}
+    cmake -S . -B {{BUILD_DIR}} {{GENERATOR}} {{CMAKE_FLAGS}} -DBUILD_CUDA=ON
 
 build: configure
     cmake --build {{BUILD_DIR}} -j
