@@ -55,7 +55,7 @@ jobs:
         shell: spack-bash {0}
         run: |
           spack env activate lobxp
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DBUILD_CUDA=OFF
 
       - name: Build
         run: cmake --build build -j $(nproc)

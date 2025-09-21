@@ -6,7 +6,8 @@ spack:
   specs:
     - eigen@3.4
     - catch2@3
-
+    - cuda
+    - cmake
   packages:
     all:
       target: [x86_64]
@@ -15,6 +16,11 @@ spack:
         - spec: cmake@3.22.1
           prefix: /usr
       buildable: false
-
+    cuda:
+      externals:
+        - spec: cuda@12.0
+          prefix: /usr/local/cuda-12.0
+      buildable: false
   config:
-    install_tree: $spack/opt/spack
+    install_tree:
+      root: $spack/opt/spack
