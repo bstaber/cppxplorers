@@ -50,3 +50,16 @@ just serve-book
 ```
 
 This will build the book and serve it at `http://localhost:3000`. You can then navigate to the book in your web browser.
+
+## Just
+
+We use `just` as a task runner to automate common tasks. You can find the `justfile` in the root directory. Some common tasks include:
+
+- `just build`: Build all crates
+- `just test`: Run all tests
+- `just serve-book`: Build and serve the documentation book
+- `just clean`: Clean all build artifacts
+- `just fmt`: Format all code using `clang-format`
+- `just lint`: Run `clang-tidy` on all code
+- `just configure`: Configure all crates with CMake
+- `just`: Configure, build, and test all crates
