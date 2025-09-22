@@ -1,6 +1,6 @@
 #include <cstdio>
 #include <cuda_runtime.h>
-#include <random>
+#include <vector>
 
 __global__ void saxpy(int n, float a, float *x, float *y){
     // threadIdx.x: thread index within the block
@@ -31,7 +31,6 @@ int main() {
     // Set up data
     const int N = 100;
     float alpha = 3.14f;
-    float *h_x, *h_y;
     float *d_x, *d_y;
     size_t size = N * sizeof(float);
 
@@ -40,17 +39,15 @@ int main() {
     cudaMalloc(&d_y, size);
 
     // Initialize host data
-    h_x = (float*)malloc(size);
-    h_y = (float*)malloc(size);
-
-    for (int i = 0; i < N; i++) {
-        h_x[i] = rand() / (float)RAND_MAX;
-        h_y[i] = rand() / (float)RAND_MAX;
+    std::vector<float> h_x(N), h_y(N);
+    for (int i = 0; i < N; ++i) {
+        h_x[i] = std::rand() / (float)RAND_MAX;
+        h_y[i] = std::rand() / (float)RAND_MAX;
     }
 
     // Copy data to device
-    cudaMemcpy(d_x, h_x, size, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_y, h_y, size, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_x, h_x.data(), size, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_y, h_y.data(), size, cudaMemcpyHostToDevice);
 
     // Define block size (number of threads per block)
     int blockSize = 4;
@@ -63,14 +60,12 @@ int main() {
     cudaDeviceSynchronize();
 
     // Copy result back to host
-    cudaMemcpy(h_y, d_y, size, cudaMemcpyDeviceToHost);
+    cudaMemcpy(h_y.data(), d_y, size, cudaMemcpyDeviceToHost);
     for (int i = 0; i < N; i++) {
         printf("h_y[%d] = %f\n", i, h_y[i]);
     }
 
     // Clean up
-    free(h_x);
-    free(h_y);
     cudaFree(d_x);
     cudaFree(d_y);
 
